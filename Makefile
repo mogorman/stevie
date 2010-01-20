@@ -2,7 +2,7 @@
 #fuse settings are hard-coded into the bottom lines; change them only with care.
 
 PRG            = dialadong
-OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o serial.o dhcpc.o clock-arch.o webserver.o psock.o
+OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o webserver.o psock.o #serial.o
 #MCU_TARGET     = atmega168 
 MCU_TARGET	= atmega328p
 PROGRAMMER     = stk500v1

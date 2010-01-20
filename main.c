@@ -79,7 +79,9 @@ static void main_init()
 {
 
 	clock_init();
+#ifdef MOG_DEBUG
 	serial_init();
+#endif
 	zg_init();
 
 //#ifdef USE_DIG0_INTR
