@@ -41,7 +41,6 @@
 
 
 #include "timer.h"
-#include "global-conf.h"
 #include "uip_arp.h"
 #include "network.h"
 #include "witypes.h"

@@ -353,16 +353,8 @@ dhcpc_configured(const struct dhcpc_state *s)
 	webserver_init();
 #endif
 
-#ifdef APP_WEBCLIENT
-	webclient_init();
-#endif
-
 #ifdef APP_SOCKAPP
 	socket_app_init();
-#endif
-
-#ifdef APP_UDPAPP
-	udpapp_init();
 #endif
 
 }

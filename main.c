@@ -4,13 +4,16 @@
 #include <avr/pgmspace.h>
 
 #include "witypes.h"
-#include "global-conf.h"
 #include "network.h"
 #include "g2100.h"
 #include "spi.h"
 #include "stack.h"
 #include "config.h"
-#include "serial.h"
+#include "uip.h"
+
+#ifdef MOG_DEBUG
+	#include "serial.h"
+#endif
 
 #define WIRELESS_MODE_INFRA	1
 #define WIRELESS_MODE_ADHOC	2

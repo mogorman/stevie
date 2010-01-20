@@ -49,7 +49,7 @@
 #ifndef __PT_H__
 #define __PT_H__
 
-#include "lc.h"
+#include "lc-switch.h"
 
 struct pt {
   lc_t lc;

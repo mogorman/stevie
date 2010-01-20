@@ -31,7 +31,7 @@
 #include "config.h"
 #include "g2100.h"
 #include "spi.h"
-#include "global-conf.h"
+#include "uip.h"
 
 static U8 mac[6];
 static U8 zg_conn_status;

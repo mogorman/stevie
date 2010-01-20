@@ -1,9 +1,10 @@
+LGPL
+clock-arch.c
+
 GPLv2
 config.h
-global-conf.h
 network.c
 network.h
-server.h
 socketapp.h
 spi.h
 stack.c
@@ -17,7 +18,6 @@ uip.h			--minor change
 uipopt.h		--nochanges
 webclient.h
 webserver.h
-wiserver.h
 wishield.h
 witypes.h
 
@@ -26,7 +26,6 @@ timer.c
 clock.h
 dhcpc.c
 dhcpc.h
-lc.h
 lc-switch.h
 psock.c
 psock.h
@@ -47,7 +46,6 @@ Makefile
 serial.c
 serial.h
 clock-arch.c
-clock-arch.h
 
 NOT
 avrdude.conf
