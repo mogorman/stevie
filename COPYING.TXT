@@ -9,16 +9,13 @@ socketapp.h
 spi.h
 stack.c
 stack.h
-udpapp.h
 uip_arp.c		--one added function
 uip_arp.h		--one added function
 uip.c			--minor changes i have more 
-uip_conf.h		
+uip-conf.h		
 uip.h			--minor change
 uipopt.h		--nochanges
-webclient.h
 webserver.h
-wishield.h
 witypes.h
 
 BSD
