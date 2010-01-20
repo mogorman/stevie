@@ -51,7 +51,6 @@ extern U8 wireless_mode;
 extern prog_uchar wep_keys[];
 
 extern const prog_char webpage[];
-extern const prog_char twitter[];
 
 #define WIRELESS_MODE_INFRA	1
 #define WIRELESS_MODE_ADHOC	2

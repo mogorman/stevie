@@ -1,7 +1,4 @@
 GPLv2
-apps-conf.h
-avrlibdefs.h
-avrlibtypes.h
 config.h
 global-conf.h
 network.c
