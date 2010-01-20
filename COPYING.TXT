@@ -1,0 +1,56 @@
+GPLv2
+apps-conf.h
+avrlibdefs.h
+avrlibtypes.h
+config.h
+global-conf.h
+network.c
+network.h
+server.h
+socketapp.h
+spi.h
+stack.c
+stack.h
+udpapp.h
+uip_arp.c		--one added function
+uip_arp.h		--one added function
+uip.c			--minor changes i have more 
+uip_conf.h		
+uip.h			--minor change
+uipopt.h		--nochanges
+webclient.h
+webserver.h
+wiserver.h
+wishield.h
+witypes.h
+
+BSD
+timer.c
+clock.h
+dhcpc.c
+dhcpc.h
+lc.h
+lc-switch.h
+psock.c
+psock.h
+pt.h
+timer.h
+uip_arch.h
+uiplib.c
+uiplib.h
+
+ZG2100_license
+g2100.c
+g2100.h
+
+
+Mine
+main.c
+Makefile
+serial.c
+serial.h
+clock-arch.c
+clock-arch.h
+
+NOT
+avrdude.conf
