@@ -370,7 +370,8 @@ dhcpc_configured(const struct dhcpc_state *s)
 void
 dhcpc_appcall(void)
 {
-  handle_dhcp();
+	if(s.state != STATE_CONFIG_RECEIVED)
+		handle_dhcp();
 }
 /*---------------------------------------------------------------------------*/
 void
