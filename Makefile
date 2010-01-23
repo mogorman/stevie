@@ -2,20 +2,17 @@
 #fuse settings are hard-coded into the bottom lines; change them only with care.
 
 PRG            = dialadong
-OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o webserver.o psock.o
-#OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o webserver.o psock.o serial.o
-
+#OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o
+OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o serial.o
+#DEFS           = -DF_CPU=16000000L
+DEFS           = -DF_CPU=16000000L -DMOG_DEBUG
 #MCU_TARGET     = atmega168 
 MCU_TARGET	= atmega328p
-PROGRAMMER     = stk500v1
-#AVRDUDE_TARGET = m168 
 AVRDUDE_TARGET = m328p
+#AVRDUDE_TARGET = m168 
 PORT		   = /dev/ttyUSB0
-
-OPTIMIZE       = -Os
-
-DEFS           = -DF_CPU=16000000L
-#DEFS           = -DF_CPU=16000000L -DMOG_DEBUG
+PROGRAMMER     = stk500v1
+OPTIMIZE       = -Os  
 LIBS           =
 
 
@@ -25,7 +22,7 @@ CC             = avr-gcc
 
 # Override is only needed by avr-lib build system.
 
-override CFLAGS        = -g -Wall -ffunction-sections -fdata-sections $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
+override CFLAGS        = -g -Wall -Wl,-static -Wl,--gc-sections -ffunction-sections -fdata-sections -Wl,-s $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
 override LDFLAGS       = -Wl,-Map,$(PRG).map
 
 OBJCOPY        = avr-objcopy
@@ -85,7 +82,7 @@ install: program
 program:
 	stty -F $(PORT) hupcl
 	avrdude -Cavrdude.conf -p $(AVRDUDE_TARGET) -c $(PROGRAMMER) -P $(PORT) \
-         -b57600 -D -Uflash:w:$(PRG).hex:i
+         -b57600 -F  -Uflash:w:$(PRG).hex:i
 
 
 #  Want to use 12 MHz low-power crystal oscillator now

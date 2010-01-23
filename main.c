@@ -22,8 +22,8 @@
 unsigned char local_ip[] = {0,0,0,0};	// IP address of WiShield
 unsigned char gateway_ip[] = {0,0,0,0};	// router or gateway IP address
 unsigned char subnet_mask[] = {0,0,0,0};	// subnet mask for the local network
+//const prog_char ssid[] PROGMEM = {"WiFiPublic"};		// max 32 bytes
 const prog_char ssid[] PROGMEM = {"dd-wrt"};		// max 32 bytes
-
 unsigned char security_type = 0;	// 0 - open; 1 - WEP; 2 - WPA; 3 - WPA2
 
 // WPA/WPA2 passphrase

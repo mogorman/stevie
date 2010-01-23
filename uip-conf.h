@@ -138,15 +138,10 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_UDP_CONNS		1
 
 //Include app configuration
-#define APP_WEBSERVER
-//#define APP_SOCKAPP
+#define TDTP_SOCKAPP
 
-#ifdef APP_WEBSERVER
-#include "webserver.h"
-#endif
-
-#ifdef APP_SOCKAPP
-#include "socketapp.h"
+#ifdef TDTP_SOCKAPP
+#include "tdtp.h"
 #endif
 
 

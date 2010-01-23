@@ -39,7 +39,6 @@
 #include "dhcpc.h"
 #include "timer.h"
 #include "pt.h"
-#include "webserver.h"
 
 #define MYNAME "dialadong"
 #define STATE_INITIAL         0
@@ -294,7 +293,7 @@ PT_THREAD(handle_dhcp(void))
         PT_RESTART(&s.pt);
     }
   } while(s.state != STATE_CONFIG_RECEIVED);
-#if 0
+#ifdef MOG_DEBUG
   printf("Got IP address %d.%d.%d.%d\n",
        uip_ipaddr1(s.ipaddr), uip_ipaddr2(s.ipaddr),
        uip_ipaddr3(s.ipaddr), uip_ipaddr4(s.ipaddr));
@@ -349,12 +348,8 @@ dhcpc_configured(const struct dhcpc_state *s)
     uip_sethostaddr(s->ipaddr);
     uip_setdraddr(s->default_router);
     uip_setnetmask(s->netmask);
-#ifdef APP_WEBSERVER
-	webserver_init();
-#endif
-
-#ifdef APP_SOCKAPP
-	socket_app_init();
+#ifdef TDTP_SOCKAPP
+	tdtp_init();
 #endif
 
 }
