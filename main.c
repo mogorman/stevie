@@ -22,12 +22,12 @@
 unsigned char local_ip[] = {0,0,0,0};	// IP address of WiShield
 unsigned char gateway_ip[] = {0,0,0,0};	// router or gateway IP address
 unsigned char subnet_mask[] = {0,0,0,0};	// subnet mask for the local network
-const prog_char ssid[] PROGMEM = {"WiFiPublic"};		// max 32 bytes
-//const prog_char ssid[] PROGMEM = {"dd-wrt"};		// max 32 bytes
-unsigned char security_type = 0;	// 0 - open; 1 - WEP; 2 - WPA; 3 - WPA2
+//const prog_char ssid[] PROGMEM = {"WiFiPublic"};		// max 32 bytes
+const prog_char ssid[] PROGMEM = {"topsecret"};		// max 32 bytes
+unsigned char security_type = 3;	// 0 - open; 1 - WEP; 2 - WPA; 3 - WPA2
 
 // WPA/WPA2 passphrase
-const prog_char security_passphrase[] PROGMEM = {};	// max 64 characters
+const prog_char security_passphrase[] PROGMEM = {"m*<wX9OUwd"};	// max 64 characters
 
 // WEP 128-bit keys
 // sample HEX keys
@@ -41,7 +41,6 @@ unsigned char wireless_mode = WIRELESS_MODE_INFRA;
 unsigned char ssid_len;
 unsigned char security_passphrase_len;
 
-const prog_char webpage[] PROGMEM = {"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<center><h1>I AM A DILDO SERVING YOU WEBERNETS</h1></center>"};
 
 
 static void main_init()

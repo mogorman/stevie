@@ -22,7 +22,7 @@ static int tdtp_connect(void)
   struct uip_conn *conn;
   uip_ipaddr_t ipaddr;
 
-  uip_ipaddr(&ipaddr, 10, 1,10,126);
+  uip_ipaddr(&ipaddr, 192, 168, 1, 145);
   conn = uip_connect(&ipaddr, htons(6969));
   if(conn == NULL) {
 #ifdef MOG_DEBUG
