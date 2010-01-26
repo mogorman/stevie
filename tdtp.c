@@ -15,14 +15,14 @@
 
 int kill = 0;
 //void tdtp_init(void)
-void tdtp_blink(void);
+static void tdtp_blink(void);
 //static struct tdtp_state tdtp;
 static int tdtp_connect(void)
 {
   struct uip_conn *conn;
   uip_ipaddr_t ipaddr;
 
-  uip_ipaddr(&ipaddr, 192, 168, 1, 145);
+  uip_ipaddr(&ipaddr, 10, 69, 69, 1);
   conn = uip_connect(&ipaddr, htons(6969));
   if(conn == NULL) {
 #ifdef MOG_DEBUG
@@ -58,8 +58,7 @@ void tdtp_appcall(void)
 
 
 
-#if 1
-void tdtp_blink(void)
+static void tdtp_blink(void)
 {
   /* char i; */
   /* printf("hello you\r\n"); */
@@ -73,4 +72,3 @@ void tdtp_blink(void)
   /*   } */
     PORTB ^= (1<<PB1);     // put Arduino Pin 13 (Atmega8 PortB bit 5) LOW (%00000000)
 }
-#endif
