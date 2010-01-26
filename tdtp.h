@@ -6,9 +6,6 @@
 
 
 struct tdtp_state {
-  u8_t connected;
-  struct psock p;
-  char inputbuffer[10];
 };
 
 typedef struct tdtp_state uip_tcp_appstate_t;

@@ -70,7 +70,7 @@ void stack_init(void)
 	mac.addr[4] = mac_addr[4];
 	mac.addr[5] = mac_addr[5];
 
-	timer_set(&periodic_timer, CLOCK_SECOND / 2);
+	timer_set(&periodic_timer, CLOCK_SECOND / 10);
 	timer_set(&arp_timer, CLOCK_SECOND * 10);
 	timer_set(&self_arp_timer, CLOCK_SECOND * 30);
 

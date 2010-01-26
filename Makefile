@@ -2,10 +2,10 @@
 #fuse settings are hard-coded into the bottom lines; change them only with care.
 
 PRG            = dialadong
-#OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o
-OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o serial.o
-#DEFS           = -DF_CPU=16000000L
-DEFS           = -DF_CPU=16000000L -DMOG_DEBUG
+OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o
+#OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o serial.o
+DEFS           = -DF_CPU=16000000L
+#DEFS           = -DF_CPU=16000000L -DMOG_DEBUG
 #MCU_TARGET     = atmega168 
 MCU_TARGET	= atmega328p
 AVRDUDE_TARGET = m328p
