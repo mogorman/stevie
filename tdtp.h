@@ -6,6 +6,8 @@
 
 
 struct tdtp_state {
+        char inputbuffer[10];
+        struct psock p;
 };
 
 typedef struct tdtp_state uip_tcp_appstate_t;
