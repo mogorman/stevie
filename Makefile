@@ -2,19 +2,28 @@
 #fuse settings are hard-coded into the bottom lines; change them only with care.
 
 PRG            = dialadong
-OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o
-#OBJ            = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o serial.o
-DEFS           = -DF_CPU=16000000L
-#DEFS           = -DF_CPU=16000000L -DMOG_DEBUG
-#MCU_TARGET     = atmega168 
-MCU_TARGET	= atmega328p
-AVRDUDE_TARGET = m328p
-#AVRDUDE_TARGET = m168 
 PORT		   = /dev/ttyUSB0
 PROGRAMMER     = stk500v1
-OPTIMIZE       = -Os  
+OPTIMIZE       = -Os
 LIBS           =
+AVR = 328
+MOG_DEBUG = 0
 
+ifeq ($(AVR), 168)
+	MCU_TARGET = atmega168
+	AVRDUDE_TARGET = m168
+else
+	MCU_TARGET = atmega328p
+	AVRDUDE_TARGET = m328p
+endif
+
+ifeq ($(MOG_DEBUG), 1)
+	OBJ = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o serial.o
+	DEFS = -DF_CPU=16000000L -DMOG_DEBUG
+else
+	OBJ = main.o stack.o g2100.o network.o uip.o uip_arp.o timer.o dhcpc.o clock-arch.o psock.o tdtp.o
+	DEFS = -DF_CPU=16000000L
+endif
 
 # You should not have to change anything below here.
 
@@ -29,6 +38,7 @@ OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
 all: $(PRG).elf lst text #eeprom
+	@ls -l $(PRG).bin |cut -f5 -d' '
 
 $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
@@ -102,6 +112,5 @@ program:
 
 
 
-# Original fuse settings: 	
-#	 -U lfuse:w:0x64:m  -U hfuse:w:0xDF:m	-U efuse:w:0xff:m	
-	
+# Original fuse settings:
+#	 -U lfuse:w:0x64:m  -U hfuse:w:0xDF:m	-U efuse:w:0xff:m
