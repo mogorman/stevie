@@ -45,8 +45,7 @@ unsigned char security_passphrase_len;
 
 static void main_init()
 {
-        DDRB = (1<<PB1);
-
+	tdtp_hw_init();
 	clock_init();
 #ifdef MOG_DEBUG
 	serial_init();

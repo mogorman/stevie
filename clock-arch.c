@@ -9,10 +9,6 @@
 
 #include "clock.h"
 
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
-#endif
-
 #define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
 #define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
 
@@ -78,22 +74,22 @@ void clock_init()
         // (using phase-correct PWM would mean that timer 0 overflowed half as often
         // resulting in different millis() behavior on the ATmega8 and ATmega168)
 #if !defined(__AVR_ATmega8__)
-        sbi(TCCR0A, WGM01);
-        sbi(TCCR0A, WGM00);
+	TCCR0A |= _BV(WGM01);
+	TCCR0A |= _BV(WGM00);
 #endif
         // set timer 0 prescale factor to 64
 #if defined(__AVR_ATmega8__)
-        sbi(TCCR0, CS01);
-        sbi(TCCR0, CS00);
+	TCCR0 |= _BV(CS01);
+	TCCR0 |= _BV(CS00);
 #else
-        sbi(TCCR0B, CS01);
-        sbi(TCCR0B, CS00);
+	TCCR0B |= _BV(CS01);
+	TCCR0B |= _BV(CS00);
 #endif
         // enable timer 0 overflow interrupt
 #if defined(__AVR_ATmega8__)
-        sbi(TIMSK, TOIE0);
+	TIMSK |= _BV(TOIE0);
 #else
-        sbi(TIMSK0, TOIE0);
+	TIMSK0 |= _BV(TOIE0);
 #endif
 
         // timers 1 and 2 are used for phase-correct hardware pwm
@@ -102,44 +98,43 @@ void clock_init()
         // 8 MHz (with a 16 MHz clock) at 50% duty cycle
 
         // set timer 1 prescale factor to 64
-        sbi(TCCR1B, CS11);
-        sbi(TCCR1B, CS10);
+	TCCR1B |= _BV(CS11);
+	TCCR1B |= _BV(CS10);
         // put timer 1 in 8-bit phase correct pwm mode
-        sbi(TCCR1A, WGM10);
-
+	TCCR1A |= _BV(WGM10);
         // set timer 2 prescale factor to 64
 #if defined(__AVR_ATmega8__)
-        sbi(TCCR2, CS22);
+	TCCR2 |= _BV(CS22);
 #else
-        sbi(TCCR2B, CS22);
+	TCCR2B |= _BV(CS22);
 #endif
         // configure timer 2 for phase correct pwm (8-bit)
 #if defined(__AVR_ATmega8__)
-        sbi(TCCR2, WGM20);
+	TCCR2 |= _BV(WGM20);
 #else
-        sbi(TCCR2A, WGM20);
+	TCCR2A |= _BV(WGM20);
 #endif
 #if defined(__AVR_ATmega1280__)
         // set timer 3, 4, 5 prescale factor to 64
-        sbi(TCCR3B, CS31);      sbi(TCCR3B, CS30);
-        sbi(TCCR4B, CS41);      sbi(TCCR4B, CS40);
-        sbi(TCCR5B, CS51);      sbi(TCCR5B, CS50);
+	TCCR3B |= _BV(CS31);	TCCR3B |= _BV(CS30);
+	TCCR4B |= _BV(CS41);	TCCR4B |= _BV(CS40);
+	TCCR5B |= _BV(CS51);	TCCR5B |= _BV(CS50);
         // put timer 3, 4, 5 in 8-bit phase correct pwm mode
-        sbi(TCCR3A, WGM30);
-        sbi(TCCR4A, WGM40);
-        sbi(TCCR5A, WGM50);
+	TCCR3A |= _BV(WGM30);
+	TCCR4A |= _BV(WGM40);
+	TCCR5A |= _BV(WGM50);
 #endif
 
         // set a2d prescale factor to 128
         // 16 MHz / 128 = 125 KHz, inside the desired 50-200 KHz range.
         // XXX: this will not work properly for other clock speeds, and
         // this code should use F_CPU to determine the prescale factor.
-        sbi(ADCSRA, ADPS2);
-        sbi(ADCSRA, ADPS1);
-        sbi(ADCSRA, ADPS0);
+	ADCSRA |= _BV(ADPS2);
+	ADCSRA |= _BV(ADPS1);
+	ADCSRA |= _BV(ADPS0);
 
         // enable a2d conversions
-        sbi(ADCSRA, ADEN);
+	ADCSRA |= _BV(ADEN);
 
         // the bootloader connects pins 0 and 1 to the USART; disconnect them
         // here so they can be used as normal digital i/o; they will be

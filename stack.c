@@ -87,21 +87,10 @@ void stack_init(void)
                 uip_setdraddr(ipaddr);
                 uip_ipaddr(ipaddr, subnet_mask[0],subnet_mask[1],subnet_mask[2],subnet_mask[3]);
                 uip_setnetmask(ipaddr);
-#ifdef APP_WEBSERVER
-		webserver_init();
+#ifdef TDTP_SOCKAPP
+	tdtp_init();
 #endif
 
-#ifdef APP_WEBCLIENT
-		webclient_init();
-#endif
-
-#ifdef APP_SOCKAPP
-		socket_app_init();
-#endif
-
-#ifdef APP_UDPAPP
-		udpapp_init();
-#endif
 
         }
 }

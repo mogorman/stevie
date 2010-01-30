@@ -8,8 +8,6 @@
 #define FOSC 16000000
 #define BAUD 9600
 #define MYUBRR ((FOSC/16)/BAUD-1)
-#define sbi(var, mask)   ((var) |= (uint8_t)(1 << mask))
-#define cbi(var, mask)   ((var) &= (uint8_t)~(1 << mask))
 
 #define STATUS_LED 0
 

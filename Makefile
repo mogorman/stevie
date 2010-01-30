@@ -7,14 +7,16 @@ PROGRAMMER     = stk500v1
 OPTIMIZE       = -Os
 LIBS           =
 AVR = 328
-MOG_DEBUG = 0
+MOG_DEBUG = 1
 
 ifeq ($(AVR), 168)
 	MCU_TARGET = atmega168
 	AVRDUDE_TARGET = m168
+	SIZE = 14336
 else
 	MCU_TARGET = atmega328p
 	AVRDUDE_TARGET = m328p
+	SIZE = 30720
 endif
 
 ifeq ($(MOG_DEBUG), 1)
@@ -38,7 +40,7 @@ OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
 all: $(PRG).elf lst text #eeprom
-	@ls -l $(PRG).bin |cut -f5 -d' '
+	@echo `ls -l $(PRG).bin |cut -f5 -d' '` bytes  of $(SIZE) total available
 
 $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)

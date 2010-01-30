@@ -33,6 +33,11 @@ static int tdtp_connect(void)
         return 1;
 }
 
+void tdtp_hw_init(void)
+{
+	DDRB = (1<<PB1);
+}
+
 void tdtp_init(void)
 {
         tdtp_connect();
