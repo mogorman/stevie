@@ -2,6 +2,5 @@
 #define __SERIAL_H__
 
 void serial_init(void);
-int serial_putchar(char data, FILE* stream);
-
+void serial_usartrx_isr(void);
 #endif

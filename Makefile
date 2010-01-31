@@ -7,7 +7,7 @@ PROGRAMMER     = stk500v1
 OPTIMIZE       = -Os
 LIBS           =
 AVR = 328
-MOG_DEBUG = 0
+MOG_DEBUG = 1
 
 ifeq ($(AVR), 168)
 	MCU_TARGET = atmega168

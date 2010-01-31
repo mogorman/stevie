@@ -57,7 +57,6 @@ static struct timer periodic_timer, arp_timer, self_arp_timer;
 
 void stack_init(void)
 {
-	uip_ipaddr_t ipaddr;
 
 	struct uip_eth_addr mac;
 

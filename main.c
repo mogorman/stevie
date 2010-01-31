@@ -30,10 +30,10 @@ unsigned char security_passphrase_len;
 static void main_init()
 {
 	tdtp_hw_init();
-	clock_init();
 #ifdef MOG_DEBUG
 	serial_init();
 #endif
+	clock_init();
 
 	zg_init();
 
@@ -77,10 +77,17 @@ ISR(PCINT0_vect)
 ISR(INT0_vect)
 {
 	zg_isr();
-} 
+}
 
 ISR(TIMER0_OVF_vect)
 {
 	clock_timer0_isr();
 	tdtp_timer0_isr();
 }
+
+#ifdef MOG_DEBUG
+ISR(USART_RX_vect)
+{
+        serial_usartrx_isr();
+}
+#endif

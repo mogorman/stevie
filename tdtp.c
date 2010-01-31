@@ -74,7 +74,7 @@ void tdtp_init(void)
 void tdtp_appcall(void)
 {
         struct tdtp_state *t = &(uip_conn->appstate);
-        PSOCK_INIT(&t->p, t->inputbuffer, sizeof(t->inputbuffer));
+        PSOCK_INIT(&t->p, (uint8_t *)t->inputbuffer, sizeof(t->inputbuffer));
         handle_tdtp_connection(t);
 }
 
