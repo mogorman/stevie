@@ -77,22 +77,8 @@ void stack_init(void)
 	uip_init();
 
 	uip_setethaddr(mac);
-        if ( local_ip[0] == 0 && local_ip[1] == 0 && local_ip[2] == 0 && local_ip[3] == 0 ) {
-                dhcpc_init(mac_addr, 6);
-                dhcpc_request();
-        } else {
-                uip_ipaddr(ipaddr, local_ip[0], local_ip[1], local_ip[2], local_ip[3]);
-                uip_sethostaddr(ipaddr);
-                uip_ipaddr(ipaddr, gateway_ip[0],gateway_ip[1],gateway_ip[2],gateway_ip[3]);
-                uip_setdraddr(ipaddr);
-                uip_ipaddr(ipaddr, subnet_mask[0],subnet_mask[1],subnet_mask[2],subnet_mask[3]);
-                uip_setnetmask(ipaddr);
-#ifdef TDTP_SOCKAPP
-	tdtp_init();
-#endif
-
-
-        }
+        dhcpc_init(mac_addr, 6);
+        dhcpc_request();
 }
 
 void stack_process(void)

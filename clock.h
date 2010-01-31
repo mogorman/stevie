@@ -70,6 +70,8 @@ typedef uint32_t clock_time_t;
  */
 void clock_init(void);
 
+void clock_timer0_isr(void);
+
 /**
  * Get the current clock time.
  *

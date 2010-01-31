@@ -13,9 +13,36 @@
 
 //#define TDTP_STATE_CLOSE 1
 
+/* controls exported */
+/* arg1 = motor						options being 1,2,3 */
+/* arg2 = direction					options being 0,1 */
+/* arg3 = intensity					options being 0-255 */
+/* arg4 = length of time in ms, with 0 meaning forever	options being 0-20,000 */
 
-static void tdtp_blink(void);
+/* <control vibe="rabbit" version="1.0"> */
+/* 	 <argument type="motor" option */
+/* </control> */
+
+/* initial packet contains  */
+/* Product_id:version_code:mac */
+
+/* state packet matches input packet */
+
+/* command packet gets acked immediately that state was changed */
+
+
+/* 1,0,255,20000 */
+
+
+
 static int handle_tdtp_connection(struct tdtp_state *t);
+//static void tdtp_blink(void);
+
+
+//
+void tdtp_timer0_isr(void)
+{
+}
 
 static int tdtp_connect(void)
 {
@@ -35,7 +62,7 @@ static int tdtp_connect(void)
 
 void tdtp_hw_init(void)
 {
-	DDRB = (1<<PB1);
+	DDRB = _BV(PB1);
 }
 
 void tdtp_init(void)
@@ -53,6 +80,7 @@ void tdtp_appcall(void)
 static int handle_tdtp_connection(struct tdtp_state *t)
 {
 	int result = 0;
+        int new_motor = 0, new_direction = 0, new_pwm = 0, new_time = 0;
 	PSOCK_BEGIN(&t->p);
         if(uip_connected()) {
 #ifdef MOG_DEBUG
@@ -66,6 +94,8 @@ static int handle_tdtp_connection(struct tdtp_state *t)
 	#ifdef MOG_DEBUG
 		printf("hello %d:%s:\n", uip_datalen(), t->inputbuffer);
 	#endif
+                if(sscanf(t->inputbuffer, "%d,%d,%d,%d",&new_motor, &new_direction, &new_pwm, &new_time) != 4)
+                        return -1;
 		uip_send("hi2\n",4);
 	} else if(uip_closed()) {
 #ifdef MOG_DEBUG
@@ -91,18 +121,18 @@ static int handle_tdtp_connection(struct tdtp_state *t)
 }
 
 
-
-static void tdtp_blink(void)
-{
-  /* char i; */
-  /* printf("hello you\r\n"); */
-  /* DDRB = (1<<PB0); // make Arduino Pin 13 (Atmega8 PortB bit 5) an output (%0000100) */
-  /*   for(i = 0; i < 10; i++){ */
-  /*     _delay_ms(30);      // max is 262.14 ms / F_CPU in MHz */
-  /*   } */
-  /*   PORTB ^= (1<<PB0);     // put Arduino Pin 13 (Atmega8 PortB bit 5) HIGH (%00100000) */
-  /*   for(i = 0; i < 10; i++){ */
-  /*     _delay_ms(30); */
-  /*   } */
-    PORTB ^= (1<<PB1);     // put Arduino Pin 13 (Atmega8 PortB bit 5) LOW (%00000000)
-}
+//
+//static void tdtp_blink(void)
+//{
+//  /* char i; */
+//  /* printf("hello you\r\n"); */
+//  /* DDRB = _BV(PB0); // make Arduino Pin 13 (Atmega8 PortB bit 5) an output (%0000100) */
+//  /*   for(i = 0; i < 10; i++){ */
+//  /*     _delay_ms(30);      // max is 262.14 ms / F_CPU in MHz */
+//  /*   } */
+//  /*   PORTB ^= _BV(PB0);     // put Arduino Pin 13 (Atmega8 PortB bit 5) HIGH (%00100000) */
+//  /*   for(i = 0; i < 10; i++){ */
+//  /*     _delay_ms(30); */
+//  /*   } */
+//    PORTB ^= _BV(PB1);     // put Arduino Pin 13 (Atmega8 PortB bit 5) LOW (%00000000)
+//}

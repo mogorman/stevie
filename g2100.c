@@ -322,20 +322,6 @@ U8* zg_get_mac()
 	return mac;
 }
 
-void zg_write_wep_key(U8* cmd_buf)
-{
-	zg_wep_key_req_t* cmd = (zg_wep_key_req_t*)cmd_buf;
-
-	cmd->slot = 3;		// WEP key slot
-	cmd->keyLen = 13;	// Key length: 5 bytes (64-bit WEP); 13 bytes (128-bit WEP)
-	cmd->defID = 0;		// Default key ID: Key 0, 1, 2, 3
-	cmd->ssidLen = ssid_len;
-	memset(cmd->ssid, 0x00, 32);
-	memcpy_P(cmd->ssid, ssid, ssid_len);
-	memcpy_P(cmd->key, wep_keys, ZG_MAX_ENCRYPTION_KEYS * ZG_MAX_ENCRYPTION_KEY_SIZE);
-
-	return;
-}
 
 static void zg_calc_psk_key(U8* cmd_buf)
 {
@@ -396,9 +382,6 @@ void zg_drv_process()
 					mac[4] = zg_buf[11];
 					mac[5] = zg_buf[12];
 					zg_drv_state = DRV_STATE_SETUP_SECURITY;
-					break;
-				case ZG_MAC_SUBTYPE_MGMT_REQ_WEP_KEY:
-					zg_drv_state = DRV_STATE_ENABLE_CONN_MANAGE;
 					break;
 				case ZG_MAC_SUBTYPE_MGMT_REQ_CALC_PSK:
 					memcpy(wpa_psk_key, ((zg_psk_calc_cnf_t*)&zg_buf[3])->psk, 32);
@@ -472,40 +455,17 @@ void zg_drv_process()
 		zg_drv_state = DRV_STATE_IDLE;
 		break;
 	case DRV_STATE_SETUP_SECURITY:
-		switch (security_type) {
-		case ZG_SECURITY_TYPE_NONE:
-			zg_drv_state = DRV_STATE_ENABLE_CONN_MANAGE;
-			break;
-		case ZG_SECURITY_TYPE_WEP:
-			// Install all four WEP keys on G2100
-			zg_buf[0] = ZG_CMD_WT_FIFO_MGMT;
-			zg_buf[1] = ZG_MAC_TYPE_MGMT_REQ;
-			zg_buf[2] = ZG_MAC_SUBTYPE_MGMT_REQ_WEP_KEY;
-			zg_write_wep_key(&zg_buf[3]);
-			spi_transfer(zg_buf, ZG_WEP_KEY_REQ_SIZE+3, 1);
+                // Initiate PSK calculation on G2100
+                zg_buf[0] = ZG_CMD_WT_FIFO_MGMT;
+                zg_buf[1] = ZG_MAC_TYPE_MGMT_REQ;
+                zg_buf[2] = ZG_MAC_SUBTYPE_MGMT_REQ_CALC_PSK;
+                zg_calc_psk_key(&zg_buf[3]);
+                spi_transfer(zg_buf, ZG_PSK_CALC_REQ_SIZE+3, 1);
 
-			zg_buf[0] = ZG_CMD_WT_FIFO_DONE;
-			spi_transfer(zg_buf, 1, 1);
+                zg_buf[0] = ZG_CMD_WT_FIFO_DONE;
+                spi_transfer(zg_buf, 1, 1);
 
-			zg_drv_state = DRV_STATE_IDLE;
-			break;
-		case ZG_SECURITY_TYPE_WPA:
-		case ZG_SECURITY_TYPE_WPA2:
-			// Initiate PSK calculation on G2100
-			zg_buf[0] = ZG_CMD_WT_FIFO_MGMT;
-			zg_buf[1] = ZG_MAC_TYPE_MGMT_REQ;
-			zg_buf[2] = ZG_MAC_SUBTYPE_MGMT_REQ_CALC_PSK;
-			zg_calc_psk_key(&zg_buf[3]);
-			spi_transfer(zg_buf, ZG_PSK_CALC_REQ_SIZE+3, 1);
-
-			zg_buf[0] = ZG_CMD_WT_FIFO_DONE;
-			spi_transfer(zg_buf, 1, 1);
-
-			zg_drv_state = DRV_STATE_IDLE;
-			break;
-		default:
-			break;
-		}
+                zg_drv_state = DRV_STATE_IDLE;
 		break;
 	case DRV_STATE_INSTALL_PSK:
 		// Install the PSK key on G2100
@@ -551,7 +511,6 @@ void zg_drv_process()
 		zg_buf[1] = ZG_MAC_TYPE_MGMT_REQ;
 		zg_buf[2] = ZG_MAC_SUBTYPE_MGMT_REQ_CONNECT;
 
-		cmd->secType = security_type;
 
 		cmd->ssidLen = ssid_len;
 		memset(cmd->ssid, 0, 32);
@@ -560,11 +519,8 @@ void zg_drv_process()
 		// units of 100 milliseconds
 		cmd->sleepDuration = 0;
 
-		if (wireless_mode == WIRELESS_MODE_INFRA)
-			cmd->modeBss = 1;
-		else if (wireless_mode == WIRELESS_MODE_ADHOC)
-			cmd->modeBss = 2;
-
+                cmd->modeBss = 1;
+		
 		spi_transfer(zg_buf, ZG_CONNECT_REQ_SIZE+3, 1);
 
 		zg_buf[0] = ZG_CMD_WT_FIFO_DONE;

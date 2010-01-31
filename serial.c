@@ -6,7 +6,7 @@
 
 
 #define FOSC 16000000
-#define BAUD 9600
+#define BAUD 57600
 #define MYUBRR ((FOSC/16)/BAUD-1)
 
 #define STATUS_LED 0
@@ -27,7 +27,7 @@ void serial_init (void)
     //USART Baud rate: 9600
     UBRR0H = MYUBRR >> 8;
     UBRR0L = MYUBRR;
-    UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+    UCSR0B = _BV(RXEN0)| _BV(TXEN0);
     
     stdout = &mystdout; //Required for printf init
 }

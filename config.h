@@ -38,21 +38,12 @@
 
 #include "witypes.h"
 
-extern U8 local_ip[];
-extern U8 gateway_ip[];
-extern U8 subnet_mask[];
 extern const prog_char ssid[];
 extern U8 ssid_len;
 extern const prog_char security_passphrase[];
 extern U8 security_passphrase_len;
-extern U8 security_type;
-extern U8 wireless_mode;
 
-extern prog_uchar wep_keys[];
 
-extern const prog_char webpage[];
 
-#define WIRELESS_MODE_INFRA	1
-#define WIRELESS_MODE_ADHOC	2
 
 #endif /* CONFIG_H_ */

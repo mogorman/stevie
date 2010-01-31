@@ -30,7 +30,7 @@ volatile unsigned long timer0_overflow_count = 0;
 volatile unsigned long timer0_millis = 0;
 static unsigned char timer0_fract = 0;
 
-SIGNAL(TIMER0_OVF_vect)
+void clock_timer0_isr(void)
 {
         // copy these to local variables so they can be stored in registers
         // (volatile variables must be read from memory on every access)
@@ -84,6 +84,9 @@ void clock_init()
 #else
 	TCCR0B |= _BV(CS01);
 	TCCR0B |= _BV(CS00);
+#endif
+#if !defined(__AVR_ATmega8__)
+	TCNT0 = 0;
 #endif
         // enable timer 0 overflow interrupt
 #if defined(__AVR_ATmega8__)
