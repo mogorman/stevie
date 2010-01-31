@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "tdtp.h"
 #include "uip.h"
@@ -80,6 +81,7 @@ void tdtp_appcall(void)
 static int handle_tdtp_connection(struct tdtp_state *t)
 {
 	int result = 0;
+        char *p, *tmp, *to_free;
         int new_motor = 0, new_direction = 0, new_pwm = 0, new_time = 0;
 	PSOCK_BEGIN(&t->p);
         if(uip_connected()) {
@@ -94,8 +96,36 @@ static int handle_tdtp_connection(struct tdtp_state *t)
 	#ifdef MOG_DEBUG
 		printf("hello %d:%s:\n", uip_datalen(), t->inputbuffer);
 	#endif
-                if(sscanf(t->inputbuffer, "%d,%d,%d,%d",&new_motor, &new_direction, &new_pwm, &new_time) != 4)
-                        return -1;
+                tmp = to_free = strdup(t->inputbuffer);
+                if(!tmp)
+                        return 1;
+                p = strsep(&tmp, ",");
+                if(p)
+                        new_motor = atoi(p);
+                else
+                        goto yuck;
+                p = strsep(&tmp, ",");
+                if(p)
+                        new_direction = atoi(p);
+                else
+                        goto yuck;
+                p = strsep(&tmp, ",");
+                if(p)
+                        new_pwm = atoi(p);
+                else
+                        goto yuck;
+                p = strsep(&tmp, ",");
+                if(p)
+                        new_time = atoi(p);
+                else {
+                yuck:
+                        if(to_free)
+                                free(to_free);
+                        return 1;
+                }
+                if(to_free)
+                        free(to_free);
+
 		uip_send("hi2\n",4);
 	} else if(uip_closed()) {
 #ifdef MOG_DEBUG

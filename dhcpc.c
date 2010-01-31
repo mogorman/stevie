@@ -311,7 +311,7 @@ PT_THREAD(handle_dhcp(void))
 #endif
 
   dhcpc_configured(&s);
-  
+
   /*  timer_stop(&s.timer);*/
 
   /*
@@ -329,7 +329,7 @@ void
 dhcpc_init(const void *mac_addr, int mac_len)
 {
   uip_ipaddr_t addr;
-  
+
   s.mac_addr = mac_addr;
   s.mac_len  = mac_len;
 
