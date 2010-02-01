@@ -35,6 +35,7 @@ prog_uchar wep_keys[] PROGMEM = {};
 
 static void main_init()
 {
+        tdtp_state = 0;
 	tdtp_hw_init();
 #ifdef MOG_DEBUG
 	serial_init();
@@ -69,6 +70,10 @@ int main (void)
 	while (1) {
 		stack_process();
 		zg_drv_process();
+                if(tdtp_state) {
+                        tdtp_state = 0;
+                        tdtp_init();
+                }
 	}
         return 0;
 }

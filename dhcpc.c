@@ -348,7 +348,7 @@ dhcpc_configured(const struct dhcpc_state *s)
     uip_sethostaddr(s->ipaddr);
     uip_setdraddr(s->default_router);
     uip_setnetmask(s->netmask);
-//    uip_udp_remove(s->conn);
+    uip_udp_remove(s->conn);
 #ifdef TDTP_SOCKAPP
 	tdtp_init();
 #endif

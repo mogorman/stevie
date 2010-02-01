@@ -56,6 +56,7 @@ static int tdtp_connect(void)
 #ifdef MOG_DEBUG
                 printf("failure out of ports\r\n");
 #endif
+                tdtp_state=1;
                 return 0;
         }
         return 1;
@@ -74,7 +75,9 @@ void tdtp_init(void)
 void tdtp_appcall(void)
 {
         struct tdtp_state *t = &(uip_conn->appstate);
-        PSOCK_INIT(&t->p, (uint8_t *)t->inputbuffer, sizeof(t->inputbuffer));
+        if(uip_connected()) {
+                PSOCK_INIT(&t->p, (uint8_t *)t->inputbuffer, sizeof(t->inputbuffer));
+        }
         handle_tdtp_connection(t);
 }
 
@@ -121,7 +124,8 @@ static int handle_tdtp_connection(struct tdtp_state *t)
 #ifdef MOG_DEBUG
                                 printf("hello :%d:%d:%d:%d:\r\n", new_motor, new_direction, new_pwm, new_time);
 #endif
-                                uip_send(t->inputbuffer,sizeof(t->inputbuffer));
+//                                uip_send(t->inputbuffer,sizeof(t->inputbuffer));
+                                uip_close();
                                 //do stuff here
                         }
                 }
@@ -129,29 +133,28 @@ static int handle_tdtp_connection(struct tdtp_state *t)
 #ifdef MOG_DEBUG
                 printf("failure closed\r\n");
 #endif
-		uip_close();
+		uip_abort();
+                tdtp_state = 1;
                 result = 1;
 	} else if(uip_aborted()) {
 #ifdef MOG_DEBUG
                 printf("failure aborted\r\n");
 #endif
 		uip_abort();
+                tdtp_state = 1;
 		result=1;
 	} else if(uip_timedout()) {
 #ifdef MOG_DEBUG
                 printf("failure timedout\r\n");
 #endif
 		uip_abort();
+                tdtp_state = 1;
 		result=1;
         }
 
         if(to_free)
                 free(to_free);
-        if(result) {
-		while(!tdtp_connect()) {
-			_delay_ms(30);
-		}
-        }
+
 	PSOCK_END(&t->p);
 	return result;
 }
