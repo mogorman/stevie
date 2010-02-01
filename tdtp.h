@@ -12,7 +12,7 @@ struct tdtp_state {
 
 typedef struct tdtp_state uip_tcp_appstate_t;
 
-int tdtp_state;
+u8_t tdtp_state;
 void tdtp_hw_init(void);
 void tdtp_init(void);
 void tdtp_appcall(void);

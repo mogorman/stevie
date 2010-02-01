@@ -82,7 +82,7 @@ void stack_init(void)
 
 void stack_process(void)
 {
-	int i;
+	u8_t i;
 
 		uip_len = network_read();
 

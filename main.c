@@ -30,7 +30,7 @@ unsigned char security_passphrase_len;
 
 unsigned char security_type = 3;
 unsigned char wireless_mode = WIRELESS_MODE_INFRA;
-prog_uchar wep_keys[] PROGMEM = {};
+
 
 
 static void main_init()
