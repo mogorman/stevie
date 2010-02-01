@@ -43,10 +43,5 @@ extern U8 ssid_len;
 extern const prog_char security_passphrase[];
 extern U8 security_passphrase_len;
 
-extern U8 wireless_mode;
-
-#define WIRELESS_MODE_INFRA	1
-#define WIRELESS_MODE_ADHOC	2
-
 
 #endif /* CONFIG_H_ */

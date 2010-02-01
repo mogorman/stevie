@@ -15,9 +15,6 @@
 	#include "serial.h"
 #endif
 
-#define WIRELESS_MODE_INFRA	1
-#define WIRELESS_MODE_ADHOC	2
-
 
 // Wireless configuration parameters ----------------------------------------
 const prog_char ssid[] PROGMEM = {"topsecret"};		// max 32 bytes
@@ -28,8 +25,6 @@ const prog_char security_passphrase[] PROGMEM = {"m*<wX9OUwd"};	// max 64 charac
 unsigned char ssid_len;
 unsigned char security_passphrase_len;
 
-unsigned char security_type = 3;
-unsigned char wireless_mode = WIRELESS_MODE_INFRA;
 
 
 

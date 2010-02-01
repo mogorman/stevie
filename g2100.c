@@ -523,10 +523,7 @@ void zg_drv_process()
 		// units of 100 milliseconds
 		cmd->sleepDuration = 0;
 
-		if (wireless_mode == WIRELESS_MODE_INFRA)
-			cmd->modeBss = 1;
-		else if (wireless_mode == WIRELESS_MODE_ADHOC)
-			cmd->modeBss = 2;
+                cmd->modeBss = 1;
 
 		spi_transfer(zg_buf, ZG_CONNECT_REQ_SIZE+3, 1);
 
