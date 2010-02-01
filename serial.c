@@ -30,11 +30,11 @@ void serial_init(void)
         uart_writeptr = 0;
         uart_readptr = 0;
 
-        // set default baud rate 
+        // set default baud rate
         UBRR0H = UART_BAUD_SELECT >> 8;
         UBRR0L = UART_BAUD_SELECT;
 
-        // enable receive, transmit and ensable receive interrupts 
+        // enable receive, transmit and ensable receive interrupts
         UCSR0B = (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0);
 	fdevopen(serial_putchar, serial_getchar);
         printf("TTY ON\r\n");

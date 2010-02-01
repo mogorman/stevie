@@ -32,9 +32,9 @@ static void main_init()
 {
         tdtp_state = 0;
 	tdtp_hw_init();
-#ifdef MOG_DEBUG
+//#ifdef MOG_DEBUG
 	serial_init();
-#endif
+//#endif
 	clock_init();
 	zg_init();
 
