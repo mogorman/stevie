@@ -77,6 +77,7 @@
 
 // Subtype for ZG_MAC_TYPE_MGMT_REQ and ZG_MAC_TYPE_MGMT_CONFIRM
 #define ZG_MAC_SUBTYPE_MGMT_REQ_PMK_KEY			((u8)8)
+#define ZG_MAC_SUBTYPE_MGMT_REQ_WEP_KEY			((u8)10)
 #define ZG_MAC_SUBTYPE_MGMT_REQ_CALC_PSK		((u8)12)
 #define ZG_MAC_SUBTYPE_MGMT_REQ_SET_PARAM		((u8)15)
 #define ZG_MAC_SUBTYPE_MGMT_REQ_GET_PARAM		((u8)16)
@@ -202,8 +203,21 @@ enum {
 #define ZG_MAX_PMK_LEN				32
 
 #define ZG_SECURITY_TYPE_NONE	0
+#define ZG_SECURITY_TYPE_WEP	1
 #define ZG_SECURITY_TYPE_WPA	2
 #define ZG_SECURITY_TYPE_WPA2	3
+
+typedef struct
+{
+    u8 slot;	/* slot index */
+    u8 keyLen;
+    u8 defID;	/* the default wep key id */
+    u8 ssidLen;	/* num valid bytes in ssid */
+    u8 ssid[ZG_MAX_SSID_LENGTH];	/* ssid of network */
+    u8 key[ZG_MAX_ENCRYPTION_KEYS][ZG_MAX_ENCRYPTION_KEY_SIZE];	/* wep key data for 4 default keys */
+} zg_wep_key_req_t;
+
+#define ZG_WEP_KEY_REQ_SIZE		(4 + ZG_MAX_SSID_LENGTH + ZG_MAX_ENCRYPTION_KEYS*ZG_MAX_ENCRYPTION_KEY_SIZE)
 
 typedef struct
 {
@@ -248,6 +262,7 @@ typedef struct
 
 typedef struct
 {
+	u8 secType;		/* security type : 0 - none; 1 - wep; 2 - wpa; 3 - wpa2; 0xff - best available */
     u8 ssidLen;		/* num valid bytes in ssid */
     u8 ssid[ZG_MAX_SSID_LENGTH];	/* the ssid of the target */
     u16 sleepDuration;	/* power save sleep duration in units of 100 milliseconds */

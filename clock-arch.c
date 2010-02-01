@@ -68,8 +68,8 @@ void clock_init()
 {
         // this needs to be called before setup() or some functions won't
         // work there
-        sei();
 
+        sei();
         // on the ATmega168, timer 0 is also used for fast hardware pwm
         // (using phase-correct PWM would mean that timer 0 overflowed half as often
         // resulting in different millis() behavior on the ATmega8 and ATmega168)
@@ -117,6 +117,8 @@ void clock_init()
 #else
 	TCCR2A |= _BV(WGM20);
 #endif
+
+
 #if defined(__AVR_ATmega1280__)
         // set timer 3, 4, 5 prescale factor to 64
 	TCCR3B |= _BV(CS31);	TCCR3B |= _BV(CS30);
@@ -142,11 +144,6 @@ void clock_init()
         // the bootloader connects pins 0 and 1 to the USART; disconnect them
         // here so they can be used as normal digital i/o; they will be
         // reconnected in Serial.begin()
-#if defined(__AVR_ATmega8__)
-        UCSRB = 0;
-#else
-        UCSR0B = 0;
-#endif
 }
 
 //Return time

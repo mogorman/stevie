@@ -73,6 +73,7 @@ void serial_init(void)
         // enable receive, transmit and ensable receive interrupts 
         UCSR0B = (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0);
 	fdevopen(serial_putchar, serial_getchar);
+        printf("TTY ON\r\n");
         /* dont forget sei() */
 }
 

@@ -294,19 +294,19 @@ PT_THREAD(handle_dhcp(void))
     }
   } while(s.state != STATE_CONFIG_RECEIVED);
 #ifdef MOG_DEBUG
-  printf("Got IP address %d.%d.%d.%d\n",
+  printf("Got IP address %d.%d.%d.%d\r\n",
    uip_ipaddr1(s.ipaddr), uip_ipaddr2(s.ipaddr),
    uip_ipaddr3(s.ipaddr), uip_ipaddr4(s.ipaddr));
-  printf("Got netmask %d.%d.%d.%d\n",
+  printf("Got netmask %d.%d.%d.%d\r\n",
    uip_ipaddr1(s.netmask), uip_ipaddr2(s.netmask),
    uip_ipaddr3(s.netmask), uip_ipaddr4(s.netmask));
-  printf("Got DNS server %d.%d.%d.%d\n",
+  printf("Got DNS server %d.%d.%d.%d\r\n",
    uip_ipaddr1(s.dnsaddr), uip_ipaddr2(s.dnsaddr),
    uip_ipaddr3(s.dnsaddr), uip_ipaddr4(s.dnsaddr));
-  printf("Got default router %d.%d.%d.%d\n",
+  printf("Got default router %d.%d.%d.%d\r\n",
    uip_ipaddr1(s.default_router), uip_ipaddr2(s.default_router),
    uip_ipaddr3(s.default_router), uip_ipaddr4(s.default_router));
-  printf("Lease expires in %ld seconds\n",
+  printf("Lease expires in %ld seconds\r\n",
 	 ntohs(s.lease_time[0])*65536ul + ntohs(s.lease_time[1]));
 #endif
 

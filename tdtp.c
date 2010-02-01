@@ -8,6 +8,9 @@
 #include "timer.h"
 #include "pt.h"
 #include "psock.h"
+#include "witypes.h"
+#include "g2100.h"
+
 //PB0 = port 8
 //PB1 = port 9 head
 //PB2 = dong and port 10?
@@ -20,16 +23,13 @@
 /* arg3 = intensity					options being 0-255 */
 /* arg4 = length of time in ms, with 0 meaning forever	options being 0-20,000 */
 
-/* <control vibe="rabbit" version="1.0"> */
-/* 	 <argument type="motor" option */
-/* </control> */
-
 /* initial packet contains  */
 /* Product_id:version_code:mac */
 
 /* state packet matches input packet */
 
 /* command packet gets acked immediately that state was changed */
+//dialadong-001|00:1E:C0:00:0B:DB
 
 
 /* 1,0,255,20000 */
@@ -54,7 +54,7 @@ static int tdtp_connect(void)
         conn = uip_connect(&ipaddr, htons(6969));
         if(conn == NULL) {
 #ifdef MOG_DEBUG
-                printf("failure out of ports\n");
+                printf("failure out of ports\r\n");
 #endif
                 return 0;
         }
@@ -81,71 +81,77 @@ void tdtp_appcall(void)
 static int handle_tdtp_connection(struct tdtp_state *t)
 {
 	int result = 0;
-        char *p, *tmp, *to_free;
+        char *p, *tmp, *to_free = NULL;
+        char version[32];
         int new_motor = 0, new_direction = 0, new_pwm = 0, new_time = 0;
+        U8 *mac = NULL;
 	PSOCK_BEGIN(&t->p);
-        if(uip_connected()) {
+        if(uip_connected() && !(uip_timedout())
+           && !(uip_closed()) && !(uip_aborted())) {
 #ifdef MOG_DEBUG
-                printf("failure closed\n");
+                printf("connected %u\r\n", clock_time());
 #endif
-                uip_send("hello connected\n", 16);
-        }
-	if(uip_newdata()) {
+                mac = zg_get_mac();
+                sprintf(version, "dialadong-001|%02X:%02X:%02X:%02X:%02X:%02X",
+                        mac[0],mac[1],mac[2],mac[3],mac[4],mac[5]);
+                uip_send(version, strlen(version));
+        } else if(uip_newdata()) {
                 memset(&t->inputbuffer, 0, sizeof(t->inputbuffer));
 		PSOCK_READTO(&t->p, '\n');
 	#ifdef MOG_DEBUG
-		printf("hello %d:%s:\n", uip_datalen(), t->inputbuffer);
+		printf("hello %d:%s:\r\n", uip_datalen(), t->inputbuffer);
 	#endif
                 tmp = to_free = strdup(t->inputbuffer);
-                if(!tmp)
-                        return 1;
-                p = strsep(&tmp, ",");
-                if(p)
-                        new_motor = atoi(p);
-                else
-                        goto yuck;
-                p = strsep(&tmp, ",");
-                if(p)
-                        new_direction = atoi(p);
-                else
-                        goto yuck;
-                p = strsep(&tmp, ",");
-                if(p)
-                        new_pwm = atoi(p);
-                else
-                        goto yuck;
-                p = strsep(&tmp, ",");
-                if(p)
-                        new_time = atoi(p);
-                else {
-                yuck:
-                        if(to_free)
-                                free(to_free);
-                        return 1;
+                if(tmp) {
+                        p = strsep(&tmp, ",");
+                        if(p) {
+                                new_motor = atoi(p);
+                                p = strsep(&tmp, ",");
+                        }
+                        if(p) {
+                                new_direction = atoi(p);
+                                p = strsep(&tmp, ",");
+                        }
+                        if(p) {
+                                new_pwm = atoi(p);
+                                p = strsep(&tmp, ",");
+                        }
+                        if(p) {
+                                new_time = atoi(p);
+#ifdef MOG_DEBUG
+                                printf("hello :%d:%d:%d:%d:\r\n", new_motor, new_direction, new_pwm, new_time);
+#endif
+                                uip_send(t->inputbuffer,sizeof(t->inputbuffer));
+                                //do stuff here
+                        }
                 }
-                if(to_free)
-                        free(to_free);
-
-		uip_send("hi2\n",4);
 	} else if(uip_closed()) {
 #ifdef MOG_DEBUG
-                printf("failure closed\n");
+                printf("failure closed\r\n");
 #endif
 		uip_close();
-		while(!tdtp_connect()) {
-			_delay_ms(30);
-		}
-		result=1;
-	} else if(uip_aborted() || uip_timedout()) {
+                result = 1;
+	} else if(uip_aborted()) {
 #ifdef MOG_DEBUG
-                printf("failure aborted\n");
+                printf("failure aborted\r\n");
 #endif
 		uip_abort();
+		result=1;
+	} else if(uip_timedout()) {
+#ifdef MOG_DEBUG
+                printf("failure timedout\r\n");
+#endif
+		uip_abort();
+		result=1;
+        }
+
+        if(to_free)
+                free(to_free);
+        if(result) {
 		while(!tdtp_connect()) {
 			_delay_ms(30);
 		}
-		result=1;
-	}
+        }
 	PSOCK_END(&t->p);
 	return result;
 }
