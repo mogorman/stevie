@@ -12,6 +12,7 @@
 #include "uip.h"
 
 #ifdef MOG_DEBUG
+//Turn on uart debugging.
 	#include "serial.h"
 #endif
 
